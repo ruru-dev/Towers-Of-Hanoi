@@ -106,8 +106,11 @@ const checkForWin = () => {
   // Your code here
   //Win should occur if all tokens are stacked in sequential order from largest (bottom most token) to smallest (upper most token)
   //Win also requires all tokens be placed on the right most side (stack C)
-  if (stacks.c.length === 4) {
+  if (stacks.b.length === 4 || stacks.c.length === 4) {
     return true;
+  }
+  else {
+    return false;
   }
 }
 
