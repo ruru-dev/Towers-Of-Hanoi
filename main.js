@@ -29,28 +29,89 @@ const printStacks = () => {
   console.log("c: " + stacks.c);
 }
 
+// When is this function called? What should it do with its argument?
+const towersOfHanoi = (startStack, endStack) => {
+  // Your code here
+  //Does this part call all the functions written above but in a certain order?
+  if (isLegal(startStack, endStack)) {
+    movePiece(startStack, endStack);
+    if (checkForWin()) {
+      console.log('You won ya FOOL!')
+      printStacks();
+      process.exit();
+    }
+  }
+}
+
 // Next, what do you think this function should do?
-const movePiece = () => {
+const movePiece = (startStack, endStack) => {
   // Your code here
-
+  //move selected token from old location to new location
+  let piece = stacks[startStack].pop();
+  stacks[endStack].push(piece);
 }
 
-// Before you move, should you check if the move it actually allowed? Should 3 be able to be stacked on 2
-const isLegal = () => {
+// Before you move, should you check if the move is actually allowed? Should 3 be able to be stacked on 2
+const isLegal = (startStack, endStack) => {
   // Your code here
+  //check if selected token is smaller than token it's being stacked on. If true then permissable. If false not permissable.
+  let isStartStackValid = checkValidStack(startStack)
+  let isEndStackValid = checkValidStack(endStack)
+  if (!isStartStackValid || !isEndStackValid) {
+    console.log('Please enter valid stack (a, b, or c) ya Fool!');
+    return false;
+  }
 
+  let isValidOrder = checkValidOrder(startStack, endStack)
+  if (  !isValidOrder  ) {
+    return false;
+  }
+
+  return true;
 }
+
+//Code to check if stack inputs are permissable
+const checkValidStack = (inputStack) => {
+  const permissableStackInputs = ['a', 'b', 'c'];
+  if (permissableStackInputs.includes(inputStack)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+const checkValidOrder = (startStack, endStack) => {
+  const startStackArray = stacks[startStack];
+  const endStackArray = stacks[endStack];
+  const lastStartPiece = startStackArray[startStackArray.length-1];
+  const lastEndPiece = endStackArray[endStackArray.length-1] ;
+
+  if (!lastStartPiece) {
+    console.log('There is no piece there ya Fool!')
+    return false;
+  }
+  else if (!lastEndPiece || (lastStartPiece < lastEndPiece)   ) {
+    return true;
+  }
+  else {
+    console.log('Please stack a smaller piece on the top. Ya Fool!');
+    return false;
+  } 
+}
+
 
 // What is a win in Towers of Hanoi? When should this function run?
 const checkForWin = () => {
   // Your code here
-
-}
-
-// When is this function called? What should it do with its argument?
-const towersOfHanoi = (startStack, endStack) => {
-  // Your code here
-
+  //Win should occur if all tokens are stacked in sequential order from largest (bottom most token) to smallest (upper most token)
+  //Win also requires all tokens be placed on the right most side (stack C)
+  if (stacks.b.length === 4 || stacks.c.length === 4) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 const getPrompt = () => {
